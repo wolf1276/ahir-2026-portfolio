@@ -1,20 +1,23 @@
-import { Code2, Trophy, Target, Percent, ArrowUpRight } from "lucide-react";
+import { Code2, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-async function getLeetCodeData() {
+const MONTH_LABELS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+
+type Day = { date: Date; count: number } | null;
+
+async function getLeetCodeCalendar() {
   const username = "ahir_codes_py";
   try {
     const res = await fetch("https://leetcode.com/graphql", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        query: `query getUserProfile($username: String!) {
+        query: `query userProfileCalendar($username: String!) {
           matchedUser(username: $username) {
-            submitStats: submitStatsGlobal {
-              acSubmissionNum { difficulty count }
-              totalSubmissionNum { difficulty count }
-            }
-            profile { ranking }
+            userCalendar { submissionCalendar }
           }
         }`,
         variables: { username }
@@ -23,41 +26,53 @@ async function getLeetCodeData() {
     });
 
     const json = res.ok ? await res.json() : null;
-    const user = json?.data?.matchedUser;
-    if (!user) {
-      throw new Error("Failed to fetch LeetCode stats");
-    }
+    const raw = json?.data?.matchedUser?.userCalendar?.submissionCalendar;
+    if (!raw) throw new Error("Failed to fetch LeetCode calendar");
 
-    const acByDifficulty = Object.fromEntries(
-      user.submitStats.acSubmissionNum.map((s: { difficulty: string; count: number }) => [s.difficulty, s.count])
-    );
-    const totalByDifficulty = Object.fromEntries(
-      user.submitStats.totalSubmissionNum.map((s: { difficulty: string; count: number }) => [s.difficulty, s.count])
-    );
-
-    return {
-      totalSolved: acByDifficulty.All ?? 0,
-      ranking: user.profile.ranking,
-      easySolved: acByDifficulty.Easy ?? 0,
-      mediumSolved: acByDifficulty.Medium ?? 0,
-      hardSolved: acByDifficulty.Hard ?? 0,
-      acceptanceRate: totalByDifficulty.All ? (acByDifficulty.All / totalByDifficulty.All) * 100 : 0
-    };
+    return JSON.parse(raw) as Record<string, number>;
   } catch (error) {
-    console.error("Error fetching leetcode data:", error);
-    return {
-      totalSolved: 0,
-      ranking: 0,
-      easySolved: 0,
-      mediumSolved: 0,
-      hardSolved: 0,
-      acceptanceRate: 0
-    };
+    console.error("Error fetching leetcode calendar:", error);
+    return {};
   }
 }
 
+function buildWeeks(calendar: Record<string, number>): Day[][] {
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+
+  const rangeStart = new Date(today);
+  rangeStart.setUTCDate(rangeStart.getUTCDate() - 370);
+
+  // Align to the Sunday on/before rangeStart, like GitHub's calendar.
+  const gridStart = new Date(rangeStart);
+  gridStart.setUTCDate(gridStart.getUTCDate() - gridStart.getUTCDay());
+
+  const days: Day[] = [];
+  const cursor = new Date(gridStart);
+  while (cursor <= today) {
+    const timestamp = Math.floor(cursor.getTime() / 1000);
+    days.push({ date: new Date(cursor), count: calendar[timestamp] ?? 0 });
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
+
+  const weeks: Day[][] = [];
+  for (let i = 0; i < days.length; i += 7) {
+    weeks.push(days.slice(i, i + 7));
+  }
+  return weeks;
+}
+
+function levelColor(count: number) {
+  if (count === 0) return "#EEEEEE";
+  if (count <= 2) return "#9BE9A8";
+  if (count <= 4) return "#40C463";
+  if (count <= 6) return "#30A14E";
+  return "#216E39";
+}
+
 export default async function LeetCodeStatsSection() {
-  const stats = await getLeetCodeData();
+  const calendar = await getLeetCodeCalendar();
+  const weeks = buildWeeks(calendar);
 
   return (
     <section id="leetcode-stats">
@@ -73,17 +88,17 @@ export default async function LeetCodeStatsSection() {
           </div>
         </div>
 
-        {/* Clickable Stats Card */}
+        {/* Clickable Heatmap Card */}
         <Link
           href="https://leetcode.com/u/ahir_codes_py/"
           target="_blank"
           rel="noopener noreferrer"
-          className="group block border bg-card text-card-foreground rounded-xl p-6 flex flex-col gap-6 shadow-xs relative overflow-hidden transition-all duration-300 hover:border-foreground/30 hover:scale-[1.01] hover:shadow-md focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-pointer"
+          className="group border bg-card text-card-foreground rounded-xl p-6 flex flex-col gap-6 shadow-xs relative overflow-hidden transition-all duration-300 hover:border-foreground/30 hover:scale-[1.01] hover:shadow-md focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-pointer"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Code2 className="size-5 transition-transform duration-300 group-hover:scale-110" />
-              <span className="font-semibold text-sm">Problem Solving Stats</span>
+              <span className="font-semibold text-sm">Submission Calendar</span>
             </div>
             <span className="text-xs font-semibold bg-white text-black px-3.5 py-1 rounded-full transition-all duration-300 group-hover:scale-105 shadow-xs inline-flex items-center gap-1.5">
               ahir_codes_py
@@ -91,88 +106,59 @@ export default async function LeetCodeStatsSection() {
             </span>
           </div>
 
-          {/* Difficulty Breakdown Bar */}
-          <div className="flex w-full h-2.5 rounded-full overflow-hidden bg-muted/30">
-            <div
-              className="bg-emerald-500"
-              style={{ width: `${stats.totalSolved ? (stats.easySolved / stats.totalSolved) * 100 : 0}%` }}
-            />
-            <div
-              className="bg-amber-500"
-              style={{ width: `${stats.totalSolved ? (stats.mediumSolved / stats.totalSolved) * 100 : 0}%` }}
-            />
-            <div
-              className="bg-red-500"
-              style={{ width: `${stats.totalSolved ? (stats.hardSolved / stats.totalSolved) * 100 : 0}%` }}
-            />
-          </div>
+          {/* Calendar Heatmap (GitHub-style, built from LeetCode's own submission data) */}
+          <div className="w-full overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
+            <div className="min-w-[680px] w-full flex flex-col gap-1 py-2">
+              {/* Month labels */}
+              <div className="flex gap-[3px] ml-7">
+                {weeks.map((week, i) => {
+                  const firstValidDay = week.find((d) => d !== null);
+                  const isMonthStart =
+                    firstValidDay &&
+                    firstValidDay.date.getUTCDate() <= 7 &&
+                    (i === 0 || weeks[i - 1].some(
+                      (d) => d && d.date.getUTCMonth() !== firstValidDay.date.getUTCMonth()
+                    ));
+                  return (
+                    <div key={i} className="w-[11px] text-[10px] text-muted-foreground leading-none">
+                      {isMonthStart ? MONTH_LABELS[firstValidDay!.date.getUTCMonth()] : ""}
+                    </div>
+                  );
+                })}
+              </div>
 
-          {/* Summary Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border/50">
-            {/* Stat Box 1: Total Solved */}
-            <div className="flex flex-col gap-1.5 p-3 rounded-lg bg-muted/30 border border-border/30 group-hover:bg-muted/50 transition-all duration-200">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Trophy className="size-3.5 text-emerald-500" />
-                <span>Total Solved</span>
-              </div>
-              <span className="text-lg font-bold tracking-tight">
-                {stats.totalSolved}
-              </span>
-            </div>
+              <div className="flex gap-[3px]">
+                {/* Weekday labels */}
+                <div className="flex flex-col gap-[3px] mr-2 text-[10px] text-muted-foreground leading-none w-6">
+                  <span className="h-[11px]" />
+                  <span className="h-[11px]">Mon</span>
+                  <span className="h-[11px]" />
+                  <span className="h-[11px]">Wed</span>
+                  <span className="h-[11px]" />
+                  <span className="h-[11px]">Fri</span>
+                  <span className="h-[11px]" />
+                </div>
 
-            {/* Stat Box 2: Easy */}
-            <div className="flex flex-col gap-1.5 p-3 rounded-lg bg-muted/30 border border-border/30 group-hover:bg-muted/50 transition-all duration-200">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Target className="size-3.5 text-emerald-500" />
-                <span>Easy</span>
+                {/* Weeks grid */}
+                <div className="flex gap-[3px]">
+                  {weeks.map((week, i) => (
+                    <div key={i} className="flex flex-col gap-[3px]">
+                      {week.map((day, j) =>
+                        day ? (
+                          <div
+                            key={j}
+                            className="w-[11px] h-[11px] rounded-sm"
+                            style={{ backgroundColor: levelColor(day.count) }}
+                            title={`${day.date.toISOString().split("T")[0]}: ${day.count} submission${day.count === 1 ? "" : "s"}`}
+                          />
+                        ) : (
+                          <div key={j} className="w-[11px] h-[11px]" />
+                        )
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
-              <span className="text-lg font-bold tracking-tight">
-                {stats.easySolved}
-              </span>
-            </div>
-
-            {/* Stat Box 3: Medium */}
-            <div className="flex flex-col gap-1.5 p-3 rounded-lg bg-muted/30 border border-border/30 group-hover:bg-muted/50 transition-all duration-200">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Target className="size-3.5 text-amber-500" />
-                <span>Medium</span>
-              </div>
-              <span className="text-lg font-bold tracking-tight">
-                {stats.mediumSolved}
-              </span>
-            </div>
-
-            {/* Stat Box 4: Hard */}
-            <div className="flex flex-col gap-1.5 p-3 rounded-lg bg-muted/30 border border-border/30 group-hover:bg-muted/50 transition-all duration-200">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Target className="size-3.5 text-red-500" />
-                <span>Hard</span>
-              </div>
-              <span className="text-lg font-bold tracking-tight">
-                {stats.hardSolved}
-              </span>
-            </div>
-          </div>
-
-          {/* Secondary Row: Ranking & Acceptance */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1.5 p-3 rounded-lg bg-muted/30 border border-border/30 group-hover:bg-muted/50 transition-all duration-200">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Trophy className="size-3.5 text-blue-500" />
-                <span>Global Ranking</span>
-              </div>
-              <span className="text-lg font-bold tracking-tight">
-                #{stats.ranking?.toLocaleString?.() ?? stats.ranking}
-              </span>
-            </div>
-            <div className="flex flex-col gap-1.5 p-3 rounded-lg bg-muted/30 border border-border/30 group-hover:bg-muted/50 transition-all duration-200">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Percent className="size-3.5 text-purple-500" />
-                <span>Acceptance Rate</span>
-              </div>
-              <span className="text-lg font-bold tracking-tight">
-                {stats.acceptanceRate?.toFixed ? stats.acceptanceRate.toFixed(1) : stats.acceptanceRate}%
-              </span>
             </div>
           </div>
         </Link>
