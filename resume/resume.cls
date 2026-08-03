@@ -1,103 +1,87 @@
+% File: resume.cls
+% ------------------------------------------------------------
+% A minimal, ATS‑friendly, single‑column resume class.
+% ------------------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{resume}[2026 Professional Resume Class]
+\ProvidesClass{resume}[2024/08/03 v1.0 Professional Resume]
 
+% ---- Packages ------------------------------------------------
 \LoadClass[11pt,a4paper]{article}
-
-\RequirePackage[a4paper,margin=0.65in]{geometry}
+\RequirePackage[a4paper,margin=0.7in]{geometry}
+\RequirePackage{hyperref}
 \RequirePackage{titlesec}
 \RequirePackage{enumitem}
-\RequirePackage{hyperref}
+\RequirePackage{setspace}
+\RequirePackage{fontspec} % for Times New Roman (fallback to Times)
 \RequirePackage{xcolor}
 \RequirePackage{parskip}
-\RequirePackage{tabularx}
-\RequirePackage{array}
-\RequirePackage{ifthen}
 
-\pagestyle{empty}
+% ---- Font ----------------------------------------------------
+\IfFileExists{times.ttf}{
+  \setmainfont{Times New Roman}
+}{
+  \renewcommand{\familydefault}{\rmdefault} % fallback to Times
+}
 
-%---------------------------------
-% Hyperlinks
-%---------------------------------
-
+% ---- Hyperref (black & white links) ---------------------------
 \hypersetup{
-    colorlinks=true,
-    urlcolor=black,
-    linkcolor=black
+  colorlinks=true,
+  urlcolor=black,
+  linkcolor=black,
+  citecolor=black,
+  pdfborder={0 0 0},
+  breaklinks=true,
 }
 
-%---------------------------------
-% Section Formatting
-%---------------------------------
-
+% ---- Section formatting ---------------------------------------
 \titleformat{\section}
-{\Large\bfseries}
-{}
-{0em}
-{}
-[\titlerule]
-
-\titlespacing{\section}
-{0pt}
-{12pt}
-{6pt}
-
-%---------------------------------
-% Lists
-%---------------------------------
-
-\setlist[itemize]{
-    leftmargin=1.2em,
-    itemsep=2pt,
-    topsep=2pt,
-    parsep=0pt
+  {\large\bfseries}
+  {}{0pt}{}
+\titlespacing*{\section}{0pt}{1.5ex}{0.5ex}
+\newcommand{\sectionrule}{
+  \vspace{0.4ex}\hrule\vspace{1ex}
 }
 
-%---------------------------------
-% Commands
-%---------------------------------
-
+% ---- Helper macros -------------------------------------------
+% Header: name (large, bold) and contact line
 \newcommand{\name}[1]{
-    \begin{center}
-        {\Huge\bfseries #1}
-    \end{center}
+  \begin{center}
+    {\LARGE\bfseries #1}\\[0.2ex]
+  \end{center}
 }
-
 \newcommand{\contact}[1]{
-    \begin{center}
-        \small #1
-    \end{center}
-    \vspace{0.3cm}
+  \begin{center}
+    \small #1
+  \end{center}
 }
 
-\newcommand{\entry}[4]{
-    \textbf{#1}
-    \hfill
-    #2
-
-    \textit{#3}
-
-    #4
-
-    \vspace{0.3cm}
+% Section command (adds rule automatically)
+\newcommand{\mysection}[1]{
+  \section*{#1}
+  \sectionrule
 }
 
-\newcommand{\project}[3]{
-    \textbf{#1}
-
-    #2
-
-    #3
-
-    \vspace{0.25cm}
+% Entry: title, organization, dates (right aligned), description
+\newcommand{\entry}[5]{%
+  \noindent\textbf{#1} \hfill {\small #2}\\
+  \noindent\textit{#3} \hfill {\small #4}\\
+  #5\par\vspace{0.8ex}
+}
+% Wrapper that allows a description block after the three mandatory args
+\newcommand{\entrydesc}[5]{%
+  \noindent\textbf{#1} \hfill {\small #2}\\
+  \noindent\textit{#3} \hfill {\small #4}\\
+  \begin{itemize}[leftmargin=*,label=--,nosep,topsep=0pt]
+    #5
+  \end{itemize}
+  \vspace{0.8ex}
 }
 
-\newcommand{\skill}[2]{
-    \textbf{#1}: #2
+% Simple bullet list (no extra vertical space)
+\newenvironment{myitemize}{
+  \begin{itemize}[leftmargin=*,label=--,nosep,topsep=0pt]
+}{\end{itemize}}
 
-    \vspace{0.15cm}
-}
-
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{4pt}
-
-\endinput
+% ------------------------------------------------------------
+% End of class
+% ------------------------------------------------------------

@@ -35,13 +35,12 @@ import {
 } from "@/components/ui/svgs/skills-icons";
 
 export const DATA = {
-  name: "Dillion Verma",
-  initials: "DV",
+  name: "Ahir Sarkar",
+  initials: "AS",
   url: "https://dillion.io",
   location: "San Francisco, CA",
   locationLink: "https://www.google.com/maps/place/sanfrancisco",
-  description:
-    "Software Engineer turned Entrepreneur. I love building things and helping people. Very active on Twitter.",
+  description: "Blockchain developer, CAD designer, and entrepreneur building cutting‑edge Web3 and design solutions.",
   summary:
     "I'm Ahir, a Computer Science student at _IEM Kolkata_ with a passion for _building Web3 products_ and turning ideas into reality. My journey began with _CAD design_ and naturally evolved into _blockchain development_, where I enjoy creating real-world projects through _hackathons_ and _open-source contributions_. Beyond building, I'm a _Stellar Ambassador_, _Midnight Ambassador_, and actively _organize hackathons, workshops, and developer communities_ to help others learn, collaborate, and grow.",
   avatarUrl: "/me.png",
@@ -226,7 +225,7 @@ export const DATA = {
     {
       title: "Doodle",
       href: "https://github.com/wolf1276/doodle-hexafalls",
-      dates: "On-Chain Freelance Marketplace",
+      dates: '<img alt="Portfolio" src="/me.png" width="90%">On-Chain Freelance Marketplace',
       active: true,
       description:
         "A decentralized freelance marketplace that connects clients and creators through transparent, on-chain workflows. Doodle enables secure project agreements, milestone-based payments, and trustless collaboration powered by blockchain technology.",

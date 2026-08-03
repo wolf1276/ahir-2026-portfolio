@@ -14,7 +14,9 @@ jobs:
       - name: Install TeX Live Full
         run: sudo apt-get update && sudo apt-get install -y texlive-full
       - name: Compile Resume
-        run: latexmk -pdf -interaction=nonstopmode resume/resume.tex
+        run: |
+          cd resume
+          latexmk -pdf -interaction=nonstopmode resume.tex
       - name: Copy PDF to public folder
         run: |
           mkdir -p public
