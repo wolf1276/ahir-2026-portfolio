@@ -31,7 +31,9 @@ const nextConfig = {
 };
 
 // Tell Turbopack the correct project root
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+const __dirname = dirname(fileURLToPath(import.meta.url));
 export const turbopack = { root: __dirname };
-
 // withContentCollections must be the outermost plugin
 export default withContentCollections(nextConfig);
