@@ -12,6 +12,7 @@ import HackathonsSection from "@/components/section/hackathons-section";
 import ProjectsSection from "@/components/section/projects-section";
 import WorkSection from "@/components/section/work-section";
 import GitHubActivitySection from "@/components/section/github-activity-section";
+import LeetCodeStatsSection from "@/components/section/leetcode-stats-section";
 import { ArrowUpRight } from "lucide-react";
 import QuoteSection from "@/components/section/quote-section";
 
@@ -177,6 +178,11 @@ export default function Page() {
       <section id="github-activity">
         <BlurFade delay={BLUR_FADE_DELAY * 12}>
           <GitHubActivitySection />
+        </BlurFade>
+      </section>
+      <section id="leetcode-stats">
+        <BlurFade delay={BLUR_FADE_DELAY * 12.5}>
+          <LeetCodeStatsSection />
         </BlurFade>
       </section>
       <section id="hackathons">
