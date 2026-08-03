@@ -1,8 +1,9 @@
+"use client";
 import { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowDownTray, ArrowUpRight, ZoomIn, ZoomOut } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, ZoomIn, ZoomOut } from 'lucide-react';
 
 // Set worker source for pdfjs
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -29,7 +30,7 @@ export default function ResumePage() {
         <div className="flex justify-center gap-4">
           <Button asChild>
             <Link href="/resume.pdf" download>
-              <ArrowDownTray className="mr-2 h-4 w-4" />
+              <ArrowDown className="mr-2 h-4 w-4" />
               Download
             </Link>
           </Button>
