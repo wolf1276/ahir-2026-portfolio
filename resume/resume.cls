@@ -36,9 +36,9 @@
 \titleformat{\section}
   {\fontsize{11pt}{13pt}\bfseries\MakeUppercase}
   {}{0pt}{}
-\titlespacing*{\section}{0pt}{0.6ex}{0.1ex}
+\titlespacing*{\section}{0pt}{0.4ex}{0.1ex}
 \newcommand{\sectionrule}{
-  \vspace{0.1ex}\hrule\vspace{0.2ex}
+  \vspace{0.1ex}\hrule\vspace{0.1ex}
 }
 
 % ---- Helper macros -------------------------------------------
@@ -60,22 +60,22 @@
 
 \newcommand{\roleentry}[3]{%
   \noindent\textbf{#1} \hfill {\small #2}\\[0.1ex]
-  \begin{itemize}[leftmargin=1.2em,label=\textbullet,nosep,topsep=0pt,partopsep=0pt,parsep=0pt,itemsep=0.3pt]
+  \begin{itemize}[leftmargin=1.2em,label=\textbullet,nosep,topsep=0pt,partopsep=0pt,parsep=0pt,itemsep=0.1pt]
     #3
   \end{itemize}
-  \vspace{0.15ex}
+  \vspace{0.1ex}
 }
 
 \newcommand{\projectentry}[3]{%
   \noindent\textbf{#1} \hfill {\small #2}\\[0.1ex]
-  \begin{itemize}[leftmargin=1.2em,label=\textbullet,nosep,topsep=0pt,partopsep=0pt,parsep=0pt,itemsep=0.3pt]
+  \begin{itemize}[leftmargin=1.2em,label=\textbullet,nosep,topsep=0pt,partopsep=0pt,parsep=0pt,itemsep=0.1pt]
     #3
   \end{itemize}
-  \vspace{0.15ex}
+  \vspace{0.1ex}
 }
 
 \newenvironment{myitemize}{
-  \begin{itemize}[leftmargin=1.2em,label=\textbullet,nosep,topsep=0pt,partopsep=0pt,parsep=0pt,itemsep=0.3pt]
+  \begin{itemize}[leftmargin=1.2em,label=\textbullet,nosep,topsep=0pt,partopsep=0pt,parsep=0pt,itemsep=0.1pt]
 }{\end{itemize}}
 
 % ------------------------------------------------------------
