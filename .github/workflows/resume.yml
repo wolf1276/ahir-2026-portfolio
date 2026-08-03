@@ -11,11 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up LaTeX
-        uses: xu-cheng/latex-action@v2
-        with:
-          root_file: resume/resume.tex
-          working_directory: .
+      - name: Install TeX Live Full
+        run: sudo apt-get update && sudo apt-get install -y texlive-full
+      - name: Compile Resume
+        run: latexmk -pdf -interaction=nonstopmode resume/resume.tex
       - name: Copy PDF to public folder
         run: |
           mkdir -p public
