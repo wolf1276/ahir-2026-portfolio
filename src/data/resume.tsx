@@ -225,7 +225,7 @@ export const DATA = {
     {
       title: "Doodle",
       href: "https://github.com/wolf1276/doodle-hexafalls",
-      dates: '<img alt="Portfolio" src="/me.png" width="90%">On-Chain Freelance Marketplace',
+      dates: 'On-Chain Freelance Marketplace',
       active: true,
       description:
         "A decentralized freelance marketplace that connects clients and creators through transparent, on-chain workflows. Doodle enables secure project agreements, milestone-based payments, and trustless collaboration powered by blockchain technology.",
