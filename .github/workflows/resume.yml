@@ -16,7 +16,7 @@ jobs:
       - name: Compile Resume
         run: |
           cd resume
-          latexmk -pdf -interaction=nonstopmode resume.tex
+          latexmk -xelatex -interaction=nonstopmode resume.tex
       - name: Copy PDF to public folder
         run: |
           mkdir -p public

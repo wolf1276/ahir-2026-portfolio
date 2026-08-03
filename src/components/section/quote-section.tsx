@@ -20,28 +20,56 @@ async function retryFetch(url: string, attempts = 3, delayMs = 500): Promise<Res
   throw new Error('Exhausted retries');
 }
 
-// Unified quote fetcher with fallback APIs
 type QuoteData = { content: string; author: string };
+
+// Curated local quotes fallback list
+const LOCAL_QUOTES: QuoteData[] = [
+  { content: "The best way to predict the future is to create it.", author: "Peter Drucker" },
+  { content: "Simplicity is prerequisite for reliability.", author: "Edsger W. Dijkstra" },
+  { content: "Make it work, make it right, make it fast.", author: "Kent Beck" },
+  { content: "Code is like humor. When you have to explain it, it's bad.", author: "Cory House" },
+  { content: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+  { content: "Experience is the name everyone gives to their mistakes.", author: "Oscar Wilde" },
+  { content: "Knowledge is power.", author: "Francis Bacon" },
+];
+
 async function fetchRandomQuote(): Promise<QuoteData> {
-  // 1️⃣ Quotable (preferred)
+  // 1️⃣ DummyJSON (Fast & reliable)
   try {
-    const res = await retryFetch("https://api.quotable.io/random");
+    const res = await retryFetch("https://dummyjson.com/quotes/random", 2, 300);
     const json = await res.json();
-    return { content: json.content, author: json.author };
+    if (json?.quote && json?.author) {
+      return { content: json.quote, author: json.author };
+    }
   } catch (e) {
-    console.warn("Quotable failed, fallback →", e);
+    console.warn("DummyJSON quote fetch failed, fallback →", e);
   }
+
   // 2️⃣ ZenQuotes
   try {
-    const res = await retryFetch("https://zenquotes.io/api/random");
+    const res = await retryFetch("https://zenquotes.io/api/random", 2, 300);
     const json = await res.json();
-    // ZenQuotes returns an array with one object
-    return { content: json[0].q, author: json[0].a };
+    if (json?.[0]?.q && json?.[0]?.a) {
+      return { content: json[0].q, author: json[0].a };
+    }
   } catch (e) {
     console.warn("ZenQuotes failed, fallback →", e);
   }
-  // 3️⃣ Final fallback – static placeholder
-  return { content: "Stay inspired!", author: "Your App" };
+
+  // 3️⃣ Quotable
+  try {
+    const res = await retryFetch("https://api.quotable.io/random", 1, 300);
+    const json = await res.json();
+    if (json?.content && json?.author) {
+      return { content: json.content, author: json.author };
+    }
+  } catch (e) {
+    console.warn("Quotable failed, fallback →", e);
+  }
+
+  // 4️⃣ Local randomized fallback
+  const randomIndex = Math.floor(Math.random() * LOCAL_QUOTES.length);
+  return LOCAL_QUOTES[randomIndex];
 }
 
 export default function QuoteSection() {
