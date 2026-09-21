@@ -16,11 +16,13 @@ export function MediaContainer({
   return (
     <div className={`ring-4 ring-muted w-full h-[300px] rounded-lg overflow-hidden flex items-center justify-center ${className}`}>
       {type === "image" ? (
-        <img
-          src={src}
-          alt={alt}
-          className="w-full h-full object-cover object-center max-w-full max-h-full"
-        />
+          <img
+            src={src}
+            alt={alt}
+            className="w-full h-full object-cover object-center max-w-full max-h-full"
+            loading="lazy"
+            decoding="async"
+          />
       ) : (
         <video
           src={src}
@@ -31,4 +33,3 @@ export function MediaContainer({
     </div>
   );
 }
-

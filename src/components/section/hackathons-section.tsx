@@ -45,7 +45,7 @@ export default function HackathonsSection() {
             <div className="flex-1 h-px bg-linear-to-l from-transparent from-5% via-border via-95% to-transparent" />
           </div>
           <div className="flex flex-col gap-y-3 items-center justify-center">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Honors & Achievements</h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Achievements</h2>
             <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed text-balance text-center">
               During my time in university, I participated in {DATA.hackathons.length}+
               competitions and bootcamps. I love challenging myself to design engineering solutions, build innovative software, and pitch startup ideas.
@@ -61,6 +61,8 @@ export default function HackathonsSection() {
                     src={hackathon.image}
                     alt={hackathon.title}
                     className="size-10 bg-card z-10 shrink-0 overflow-hidden p-1 border rounded-full shadow ring-2 ring-border object-contain flex-none"
+                    loading="lazy"
+                    decoding="async"
                   />
                 ) : (
                   <div className="size-10 bg-card z-10 shrink-0 overflow-hidden p-2 border rounded-full shadow ring-2 ring-border flex items-center justify-center flex-none">

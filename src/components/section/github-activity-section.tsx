@@ -1,6 +1,7 @@
 import { Icons } from "@/components/icons";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function GitHubActivitySection() {
   return (
@@ -38,9 +39,12 @@ export default function GitHubActivitySection() {
           {/* Graph Container with horizontal scroll on mobile */}
           <div className="w-full overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
             <div className="min-w-[680px] w-full flex justify-center py-2">
-              <img
+              <Image
                 src="https://ghchart.rshah.org/40c463/wolf1276"
                 alt="wolf1276's GitHub contribution graph"
+                width={900}
+                height={180}
+                sizes="(max-width: 680px) 680px, 900px"
                 className="w-full h-auto object-contain dark:opacity-90 dark:brightness-110"
                 loading="lazy"
               />

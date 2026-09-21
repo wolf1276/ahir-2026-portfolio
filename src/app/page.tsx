@@ -15,7 +15,38 @@ import GitHubActivitySection from "@/components/section/github-activity-section"
 import LeetCodeStatsSection from "@/components/section/leetcode-stats-section";
 import { ArrowUpRight } from "lucide-react";
 import QuoteSection from "@/components/section/quote-section";
+import type { Metadata } from "next";
 
+const HOME_TITLE = "Ahir Sarkar | Web3 Developer & CAD Designer";
+const HOME_DESCRIPTION =
+  "Ahir Sarkar is a Web3 developer and CAD designer from Kolkata, building blockchain products, open-source projects, and engineering solutions.";
+
+export const metadata: Metadata = {
+  title: HOME_TITLE,
+  description: HOME_DESCRIPTION,
+  alternates: { canonical: "https://www.ahirrr.in/" },
+  openGraph: {
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    url: "https://www.ahirrr.in/",
+    siteName: "Ahir Sarkar",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Ahir Sarkar | Web3 Developer and CAD Designer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: ["/og-image.png"],
+  },
+};
 
 
 const BLUR_FADE_DELAY = 0.04;
@@ -27,12 +58,14 @@ export default function Page() {
         <div className="mx-auto w-full max-w-2xl space-y-8">
           <div className="gap-2 gap-y-6 flex flex-col md:flex-row justify-between">
             <div className="gap-2 flex flex-col order-2 md:order-1">
-              <BlurFadeText
-                delay={BLUR_FADE_DELAY}
-                className="text-3xl font-semibold tracking-tighter sm:text-4xl lg:text-5xl"
-                yOffset={8}
-                text="Hi, I'm Ahir."
-              />
+              <h1>
+                <BlurFadeText
+                  delay={BLUR_FADE_DELAY}
+                  className="text-3xl font-semibold tracking-tighter sm:text-4xl lg:text-5xl"
+                  yOffset={8}
+                  text="Ahir Sarkar — Web3 Developer and CAD Designer"
+                />
+              </h1>
               <BlurFadeText
                 className="text-muted-foreground max-w-[600px] md:text-lg lg:text-xl"
                 delay={BLUR_FADE_DELAY}
@@ -56,7 +89,7 @@ export default function Page() {
       <section id="about">
         <div className="flex min-h-0 flex-col gap-y-4">
           <BlurFade delay={BLUR_FADE_DELAY * 3}>
-            <h2 className="text-xl font-bold">About Me</h2>
+            <h2 className="text-xl font-bold">About</h2>
           </BlurFade>
           <BlurFade delay={BLUR_FADE_DELAY * 4}>
             <div className="prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
@@ -111,6 +144,8 @@ export default function Page() {
                         src={education.logoUrl}
                         alt={education.school}
                         className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none"
+                        loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <div className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border bg-muted flex-none" />
@@ -170,11 +205,9 @@ export default function Page() {
           </div>
         </div>
       </section>
-      <section id="projects">
-        <BlurFade delay={BLUR_FADE_DELAY * 11}>
-          <ProjectsSection />
-        </BlurFade>
-      </section>
+      <BlurFade delay={BLUR_FADE_DELAY * 11}>
+        <ProjectsSection />
+      </BlurFade>
       <section id="github-activity">
         <BlurFade delay={BLUR_FADE_DELAY * 12}>
           <GitHubActivitySection />
@@ -195,11 +228,9 @@ export default function Page() {
           <ContactSection />
         </BlurFade>
       </section>
-      <section id="gallery">
-        <BlurFade delay={BLUR_FADE_DELAY * 17}>
-          <GallerySection />
-        </BlurFade>
-      </section>
+      <BlurFade delay={BLUR_FADE_DELAY * 17}>
+        <GallerySection />
+      </BlurFade>
       <section id="quote">
         <BlurFade delay={BLUR_FADE_DELAY * 18}>
           <QuoteSection />

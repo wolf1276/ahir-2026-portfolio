@@ -37,10 +37,10 @@ import {
 export const DATA = {
   name: "Ahir Sarkar",
   initials: "AS",
-  url: "https://dillion.io",
-  location: "San Francisco, CA",
-  locationLink: "https://www.google.com/maps/place/sanfrancisco",
-  description: "Blockchain developer, CAD designer, and entrepreneur building cutting‑edge Web3 and design solutions.",
+  url: "https://www.ahirrr.in/",
+  location: "Kolkata, India",
+  locationLink: "https://www.google.com/maps/place/Kolkata",
+  description: "Ahir Sarkar is a Web3 developer and CAD designer from Kolkata, building blockchain products, open-source projects, and engineering solutions.",
   summary:
     "I'm Ahir, a Computer Science student at _IEM Kolkata_ with a passion for _building Web3 products_ and turning ideas into reality. My journey began with _CAD design_ and naturally evolved into _blockchain development_, where I enjoy creating real-world projects through _hackathons_ and _open-source contributions_. Beyond building, I'm a _Stellar Ambassador_, _Midnight Ambassador_, and actively _organize hackathons, workshops, and developer communities_ to help others learn, collaborate, and grow.",
   avatarUrl: "/me.png",
@@ -91,8 +91,8 @@ export const DATA = {
     { href: "/", icon: HomeIcon, label: "Home" },
   ],
   contact: {
-    email: "hello@example.com",
-    tel: "+123456789",
+    email: "ahirsarkar2022@gmail.com",
+    tel: "+919123846131",
     social: {
       GitHub: {
         name: "GitHub",
@@ -123,7 +123,7 @@ export const DATA = {
       },
       email: {
         name: "Send Email",
-        url: "#",
+        url: "mailto:ahirsarkar2022@gmail.com",
         icon: Icons.email,
 
         navbar: false,
@@ -158,7 +158,6 @@ export const DATA = {
     },
     {
       company: "Builder Base",
-      href: "#",
       badges: [],
       location: "Remote",
       title: "Core Team Member",
@@ -170,7 +169,6 @@ export const DATA = {
     },
     {
       company: "Freelance",
-      href: "#",
       badges: [],
       location: "Remote",
       title: "CAD Designer",
@@ -184,7 +182,7 @@ export const DATA = {
   education: [
     {
       school: "Institute of Engineering & Management (IEM), Kolkata",
-      href: "#",
+      href: "https://iem.edu.in/",
       degree: "B.Tech in Computer Science & Engineering (AI)",
       logoUrl: "/iem-logo.png",
       start: "Jul 2024",

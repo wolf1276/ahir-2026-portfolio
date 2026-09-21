@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import Markdown from "react-markdown";
+import Image from "next/image";
 
 function ProjectImage({ src, alt }: { src: string; alt: string }) {
   const [imageError, setImageError] = useState(false);
@@ -16,9 +16,12 @@ function ProjectImage({ src, alt }: { src: string; alt: string }) {
   }
 
   return (
-    <img
+    <Image
       src={src}
       alt={alt}
+      width={1397}
+      height={755}
+      sizes="(max-width: 640px) 100vw, 400px"
       className="w-full h-48 object-cover object-top"
       onError={() => setImageError(true)}
     />
@@ -62,12 +65,8 @@ export function ProjectCard({
       )}
     >
       <div className="relative shrink-0">
-        <Link
-          href={href || "#"}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block"
-        >
+        {href ? (
+            <Link href={href} className="block" aria-label={`View ${title} project page`}>
           {video ? (
             <video
               src={video}
@@ -78,11 +77,22 @@ export function ProjectCard({
               className="w-full h-48 object-cover"
             />
           ) : image ? (
-            <ProjectImage src={image} alt={title} />
+            <ProjectImage src={image} alt={`Screenshot of ${title}`} />
           ) : (
             <div className="w-full h-48 bg-muted" />
           )}
-        </Link>
+            </Link>
+          ) : (
+            <div>
+              {video ? (
+                <video src={video} autoPlay loop muted playsInline className="w-full h-48 object-cover" />
+              ) : image ? (
+                <ProjectImage src={image} alt={`Screenshot of ${title}`} />
+              ) : (
+                <div className="w-full h-48 bg-muted" />
+              )}
+            </div>
+          )}
         {links && links.length > 0 && (
           <div className="absolute top-2 right-2 flex flex-wrap gap-2">
             {links.map((link, idx) => (
@@ -112,11 +122,9 @@ export function ProjectCard({
             <time className="text-xs text-muted-foreground">{dates}</time>
           </div>
           <Link
-            href={href || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={href || "/#projects"}
             className="text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
-            aria-label={`Open ${title}`}
+            aria-label={`View ${title} project page`}
           >
             <ArrowUpRight className="h-4 w-4" aria-hidden />
           </Link>

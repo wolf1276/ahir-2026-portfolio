@@ -22,7 +22,7 @@ export default function GallerySection() {
           <Wrench className="size-5 transition-transform duration-300 group-hover:rotate-12" />
         </div>
         <div className="flex flex-col text-left">
-          <span className="font-semibold text-foreground transition-colors duration-300 group-hover:text-primary">Moments</span>
+          <span className="font-semibold text-foreground transition-colors duration-300 group-hover:text-primary">View the Gallery</span>
           <span className="text-sm text-muted-foreground">Captured memories and experiences</span>
         </div>
       </Link>

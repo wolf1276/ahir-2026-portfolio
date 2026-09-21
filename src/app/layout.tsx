@@ -21,20 +21,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(DATA.url),
+  metadataBase: new URL("https://www.ahirrr.in"),
   title: {
     default: DATA.name,
     template: `%s | ${DATA.name}`,
   },
   description: DATA.description,
-  openGraph: {
-    title: `${DATA.name}`,
-    description: DATA.description,
-    url: DATA.url,
-    siteName: `${DATA.name}`,
-    locale: "en_US",
-    type: "website",
-  },
   robots: {
     index: true,
     follow: true,
@@ -46,13 +38,24 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  twitter: {
-    title: `${DATA.name}`,
-    card: "summary_large_image",
-  },
-  verification: {
-    google: "",
-    yandex: "",
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Ahir Sarkar",
+  url: "https://www.ahirrr.in/",
+  jobTitle: "Web3 Developer and CAD Designer",
+  image: "https://www.ahirrr.in/me.png",
+  sameAs: [
+    "https://github.com/wolf1276",
+    "https://www.linkedin.com/in/ahir-sarkar/",
+    "https://x.com/ahirgrinds",
+    "https://medium.com/@ahirsarkar2022",
+  ],
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Institute of Engineering & Management, Kolkata",
   },
 };
 
@@ -70,6 +73,10 @@ export default function RootLayout({
           geistMono.variable
         )}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         <ThemeProvider attribute="class" defaultTheme="light">
           <TooltipProvider delayDuration={0}>
             <div className="absolute inset-0 top-0 left-0 right-0 h-[100px] overflow-hidden z-0">
